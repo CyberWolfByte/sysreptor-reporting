@@ -1,0 +1,356 @@
+@import "/assets/global/base.css";
+
+/* Define variables */
+:root {
+    --color-risk-critical: #E83221;
+    --color-risk-high: #FF9300;
+    --color-risk-medium: #ffee00;
+    --color-risk-low: #00AE51;
+    --color-risk-info: #76a4f3;
+
+    --color-highlight: black;
+    --color-secondary: black;
+    
+    --color-table-header: #4285F5;
+    --color-table-row-even: white;
+    --color-table-row-odd: white;
+    --color-table-content: black;
+    --color-table-header-text: white;
+
+    --color-page-background: white;
+}
+
+@page {
+    size: A4 portrait;
+    margin: 35mm 20mm 25mm 20mm;
+    background-color: var(--color-page-background);
+}
+
+/* Font */
+html {
+    font-family: "Noto Sans", sans-serif;
+    font-size: 10pt;
+    color: black;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-highlight);
+}
+
+/* Justify text */
+p {
+    text-align: justify;
+    text-align-last: start;
+}
+
+a {
+  color: var(--color-secondary); /* Set the color of unvisited links */
+  text-decoration: underline; /* Remove the underline from unvisited links */
+}
+
+
+/* Table styling */
+table, th, td {
+  border: 1px solid black;
+}
+th {
+    background-color: var(--color-table-header);
+    color: var(--color-table-header-text);
+    text-align: center;
+    white-space: nowrap;
+}
+th, td {
+    padding: 0.2em 0.5em 0.2em 0.5em;
+}
+tr.table-row-link td {
+    padding: 0;
+}
+tr.table-row-link td a {
+    display: block;
+    padding: 0.2em 0.5em 0.2em 0.5em;
+    color: inherit;
+    text-decoration: none;
+    font-style: inherit;
+}
+td.table-key {
+    height: 3em;
+    width: 10em;
+}
+tr{
+    color: var(--color-table-content);
+}
+tr:nth-child(even) {
+    background-color: var(--color-table-row-even)
+}
+tr:nth-child(odd) {
+    background-color: var(--color-table-row-odd)
+}
+.nowrap {
+    white-space: nowrap;
+}
+
+
+/* Code block styling */
+pre code {
+    border: 1px solid black;
+    padding: 0.2em !important;
+}
+code {
+    color: var(--color-highlight);
+    background-color: inherit;
+}
+
+.code-important{
+    background-color: yellow;
+    color: red;
+    font-style: italic;
+}
+
+/* Footnotes */
+@page {
+  @footnote {
+    border-top: 1px solid black;
+  }
+}
+footnote {
+  font-size: 8pt;
+}
+
+/* Classes for risk colors */
+.risk-critical { color: var(--color-risk-critical) !important; font-weight: bold; }
+.risk-high { color: var(--color-risk-high) !important; font-weight: bold; }
+.risk-medium { color: var(--color-risk-medium) !important; font-weight: bold; }
+.risk-low { color: var(--color-risk-low) !important; font-weight: bold; }
+.risk-info { color: var(--color-risk-info) !important; font-weight: bold; }
+
+.risk-bg-critical { background-color: var(--color-risk-critical) !important; color: black !important; }
+.risk-bg-high { background-color: var(--color-risk-high) !important; }
+.risk-bg-medium { background-color: var(--color-risk-medium) !important; }
+.risk-bg-low { background-color: var(--color-risk-low) !important; }
+.risk-bg-info { background-color: var(--color-risk-info) !important; }
+
+/* Helper class for referencing page number */
+.ref-page::before { 
+    content: "" !important;
+}
+.ref-page .ref-title, .ref-finding-number .ref-title {
+  display: none !important;
+}
+.ref-page::after {
+  content: target-counter(attr(href), page) !important;
+}
+.ref-finding-number::before {
+    content: target-counter(attr(href), finding-number);
+}
+
+.findings-list {
+    counter-reset: finding-number;
+}
+.finding-number {
+    color: black;
+}
+.finding-number::before {
+    counter-increment: finding-number;
+    content: counter(finding-number) ". ";
+}
+
+/* Finding */
+.finding-header th {
+    font-weight: normal;
+    width: 7em;
+}
+.finding-header tr {
+    break-inside: auto;
+}
+.finding-header-color{
+    font-size: 12pt;
+    color: black !important;
+}
+
+table.finding-header th.risk-bg-high,
+table.finding-header th.risk-bg-medium,
+table.finding-header th.risk-bg-info {
+    color: black !important; /* Set text color to black */
+}
+
+table.finding-header th.risk-bg-critical,
+table.finding-header th.risk-bg-low {
+    color: white !important; /* Set text color to white */
+}
+
+/*CSS classes for multiple systems */
+.finding-systems {
+    padding-left: 1em;
+}
+
+.finding-systems-cols {
+    column-count: 2;
+    padding-top: 1em;
+    margin-bottom: 1em;
+}
+
+.end-of-report {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+    padding-top: 250px;
+    font-style: italic;
+
+}
+
+/*Static report images */
+.pentest-phases {
+    width: 50%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* #region header */
+@page {
+    margin-top: 35mm;
+
+    --header-margin-bottom: 5mm;
+    
+    @top-left-corner {
+        content: "";
+        margin-bottom: var(--header-margin-bottom);
+        border-bottom: 2px dotted black;
+    }
+    @top-left { 
+        content: element(header-right); 
+        margin-bottom: var(--header-margin-bottom);
+        border-bottom: 2px dotted black;
+        width: 100%;
+    }
+    @top-right-corner { 
+        content: "";
+        margin-bottom: var(--header-margin-bottom); 
+        border-bottom: 2px dotted black;
+    }
+}
+#header-right { 
+    position: running(header-right); 
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+#header-logo { height: 20mm; }
+#header-text { font-size: 14pt; margin-left: -3mm; }
+/* #endregion header */
+
+/* #region footer */
+@page {
+    @bottom-left { content: element(footer-left); }
+    @bottom-center { content: element(footer-center); }
+    @bottom-right-corner { content: counter(page); }
+}
+#footer-left { position: running(footer-left); }
+#footer-center { position: running(footer-center); }
+/* #endregion footer */
+
+/* #region page-cover */
+#page-cover-logo {
+    width: 65%;
+    height: auto;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+}
+
+#page-cover-logo-title {
+    position: absolute;
+    top: 5%;
+    left: 9.5cm;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    font-size: 42pt;
+}
+
+#page-cover-title {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 14cm;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+#page-cover-title h1 {
+    font-size: 32pt;
+    color: black;
+}
+#page-cover-title h2 {
+    font-size: 24pt;
+    color: black;
+}
+#page-cover-title h3 {
+    font-size: 12pt;
+    color: black;
+}
+#page-cover-report-title{
+    color: var(--color-highlight) !important;
+}
+
+#page-cover-recipient {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    width: 14cm;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    text-align: left;
+}
+
+#page-cover-recipient h1 {
+    font-size: 16pt;
+    color: var(--color-highlight);
+}
+#page-cover-recipient h2 {
+    font-size: 12pt;
+    color: var(--color-secondary);
+}
+
+@page :first {
+    /* Hide header */
+    @top-left-corner { content: none !important; }
+    @top-left { content: none !important; }
+    @top-right-corner { content: none !important; }
+    /* Hide footer (except "confidential") */
+    @bottom-center { content: none !important; }
+    @bottom-right-corner { content: none !important; }
+}
+/* #endregion page-cover */
+
+/* #region toc */
+#toc li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: var(--color-secondary);
+}
+#toc .ref::before {
+    padding-right: 0.5em;
+}
+#toc .ref::after {
+    content: " " leader(".") " " target-counter(attr(href), page);
+}
+#toc .toc-level1 {
+    font-size: 14pt;
+    margin-top: 0.8em;
+    color: black;
+}
+#toc .toc-level2 {
+    font-size: 12pt;
+    margin-top: 0.5em;
+    margin-left: 1em;
+}
+#toc .toc-level3 {
+    font-size: 10pt;
+    margin-top: 0.4em;
+    margin-left: 2em;
+}
+/* #endregion toc */

@@ -1,0 +1,567 @@
+<div id="header" data-sysreptor-generated="page-header">
+    <div id="header-right">
+        <img id="header-logo" src="/assets/name/tcms-logo.png" alt="logo" />
+    </div>
+</div>
+
+<div id="footer" data-sysreptor-generated="page-footer">
+    <div id="footer-left"><em>BUSINESS CONFIDENTIAL</em></div>
+    <div id="footer-center">{{ report.customer_full }}</div>
+</div>
+
+<section id="page-cover" data-sysreptor-generated="page-cover">
+    <img id="page-cover-logo" src="/assets/name/tcms-logo.png" alt="">
+
+    <div id="page-cover-title">
+        <h1>{{ report.customer_short }}</h1>
+        <h2>Security Assessment Findings Report</h2>
+    </div>
+
+    <div id="page-cover-recipient">
+        <h2>Penetration Tester: {{ report.candidate.a_name }}</h2>
+        <h2>Published Date: {{ formatDate(report.report_date, 'long') }}</h2>
+        <h2>Project: {{ report.title }}</h2>
+        <h2>Version: {{ report.report_version }}</h2>
+    </div>
+    <pagebreak />
+</section>
+
+<table-of-contents id="toc" v-slot="tocItems">
+    <h1>Table of Contents</h1>
+    <ul>
+        <li v-for="item in tocItems" :class="'toc-level' + item.level">
+            <ref :to="item.id" />
+        </li>
+    </ul>
+    <pagebreak />
+</table-of-contents>
+
+<markdown>
+    # Confidentiality Statement {#SoC .in-toc.numbered}
+    This document is the exclusive property of {{ report.customer_short }} and TCM Security (TCMS). This document contains proprietary and confidential information. Duplication, redistribution, or use, in whole or in part, in any form, requires consent of both {{ report.customer_short }} and TCMS.
+
+    {{ report.customer_short }} may share this document with auditors under non-disclosure agreements to demonstrate penetration test requirement compliance.
+
+    # Disclaimer {#Disclaimer .in-toc.numbered}
+    A penetration test is considered a snapshot in time. The findings and recommendations reflect the information gathered during the assessment and not any changes or modifications made outside of that period.
+    
+    Time-limited engagements do not allow for a full evaluation of all security controls. TCMS prioritized the assessment to identify the weakest security controls an attacker would exploit. TCMS recommends conducting similar assessments on an annual basis by internal or third-party assessors to ensure the continued success of the controls.
+</markdown>
+
+<section>
+    <div>
+        <h1 id="contacts" class="in-toc numbered">Contact Information</h1>
+        <table>
+            <tr>
+                <th colspan="3" style="text-align: center">
+                    {{ report.customer_short }}
+                </th>
+            </tr>
+            <tr>
+                <td><strong>Name</strong></td>
+                <td><strong>Title</strong></td>
+                <td><strong>Contact Email</strong></td>
+            </tr>
+            <tr v-for="contact in report.customer_contacts">
+                <td>{{ contact.a_name }}</td>
+                <td>{{ contact.b_title }}</td>
+                <td>{{ contact.c_email }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="3" style="text-align: center">
+                    TCM Security
+                </th>
+            </tr>
+            <tr>
+                <td><strong>Assessor Name</strong></td>
+                <td><strong>Title</strong></td>
+                <td><strong>Assessor Contact Email</strong></td>
+            </tr>
+            <tr>
+                <td>{{ report.candidate.a_name }}</td>
+                <td>{{ report.candidate.b_title }}</td>
+                <td>{{ report.candidate.c_email }}</td>
+            </tr>
+        </table>
+    </div>
+    <pagebreak />
+</section>
+
+<section>
+    <div>
+        <h1 id="assessment_overview" class="in-toc numbered">Assessment Overview</h1>
+        <markdown :text="report.assessment_overview" />
+        <h2 id="pentest_phases" class="in-toc numbered">Phases of Penetration Testing</h2>
+        <markdown>
+            - **Planning**: Gather customer goals and obtain rules of engagement.
+            - **Discovery**: Perform scanning and enumeration to identify potential vulnerabilities, weak areas, and exploits.
+            - **Attack**: Confirm potential vulnerabilities through exploitation and perform additional discovery upon new access.
+            - **Reporting**: Document all found vulnerabilities and exploits, failed attempts, and company strengths and weaknesses.
+        </markdown>
+        <img id="pentest-phases" src="/assets/name/pentest-phases.png" alt="" class="pentest-phases">
+    </div>
+
+    <div>
+        <h1 id="assessment_components" class="in-toc numbered">Assessment Components</h1>
+        <h2 id="external_pen_test" class="in-toc numbered">External Penetration Test</h2>
+        <markdown :text="report.external_components" />
+        <h2 id="internal_pen_test" class="in-toc numbered">Internal Penetration Test</h2>
+        <markdown :text="report.internal_components" />
+    </div>
+    
+    <pagebreak />
+</section>
+
+<section>
+    <div>
+        <h1 class="in-toc numbered">Finding Severity Ratings</h1>
+        <markdown :text="report.severity_ratings" />
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Severity</th>
+                    <th>CVSS V3 Score Range</th>
+                    <th>Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="risk-bg-critical">Critical</td>
+                    <td>9.0 – 10.0</td>
+                    <td>Exploitation is straightforward and usually results in system-level compromise. It is advised to form a plan of action and patch immediately.</td>
+                </tr>
+                <tr>
+                    <td class="risk-bg-high">High</td>
+                    <td>7.0 – 8.9</td>
+                    <td>Exploitation is more difficult but could cause elevated privileges and potentially a loss of data or downtime. It is advised to form a plan of action and patch as soon as possible.</td>
+                </tr>
+                <tr>
+                    <td class="risk-bg-medium">Medium</td>
+                    <td>4.0 – 6.9</td>
+                    <td>Vulnerabilities exist but are not exploitable or require extra steps such as social engineering. It is advised to form a plan of action and patch after high-priority issues have been resolved.</td>
+                </tr>
+                <tr>
+                    <td class="risk-bg-low">Low</td>
+                    <td>0.1 – 3.9</td>
+                    <td>Vulnerabilities are non-exploitable but would reduce an organization’s attack surface. It is advised to form a plan of action and patch during the next maintenance window.</td>
+                </tr>
+                <tr>
+                    <td class="risk-bg-info">Info</td>
+                    <td>0.0</td>
+                    <td>No vulnerability exists. Additional information is provided regarding items noticed during testing, strong controls, and additional documentation.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <h1 id="risk_factors" class="in-toc numbered">Risk Factors</h1>
+    <markdown :text="report.risk_factors" />
+
+    <div>
+        <h2 id="likelihood" class="in-toc numbered">Likelihood</h2>
+        <markdown :text="report.likelihood" />
+    </div>
+
+    <div>
+        <h2 id="impact" class="in-toc numbered">Impact</h2>
+        <markdown :text="report.impact" />
+    </div>
+    <pagebreak />
+</section>
+
+<section>
+    <h1 id="scope" class="in-toc numbered">Scope</h1>
+    <markdown :text="report.scope" />
+    <div>
+        <h2 id="scope_exclusions" class="in-toc numbered">Scope Exclusions</h2>
+        <markdown :text="report.scope_exclusions" />
+    </div>
+    <div>
+        <h2 id="client_allowances" class="in-toc numbered">Client Allowances</h2>
+        <markdown :text="report.client_allowances" />
+    </div>
+    <pagebreak />
+</section>
+
+<section>
+    <h1 id="executive_summary" class="in-toc numbered">Executive Summary</h1>
+    <markdown :text="report.executive_summary" />
+
+    <div>
+        <h2 id="scope_time" class="in-toc numbered">Scoping and Time Limitations</h2>
+        <markdown :text="report.scope_time" />
+    </div>
+
+    <div>
+        <h2 id="testing_summary" class="in-toc numbered">Testing Summary</h2>
+        <markdown :text="report.testing_summary" />
+    </div>
+    
+    <div>
+        <h2 id="tester_notes" class="in-toc numbered">Tester Notes and Recommendations</h2>
+        <markdown :text="report.tester_notes" />
+    </div>
+
+    <div>
+        <h2 id="strengths_weaknesses" class="in-toc numbered">Key Strengths and Weaknesses</h2>
+        <markdown :text="report.strengths_weaknesses" />
+    </div>
+    
+    <pagebreak />
+</section>
+
+<section>
+    <h1 id="vulnerability-summary" class="in-toc numbered">Vulnerability Summary & Report Card</h1>
+    <markdown :text="report.vulnerability_summary" />
+    <p>
+        In the course of this penetration test
+        <comma-and-join>
+            <template #critical v-if="finding_stats.count_critical > 0"><strong class="risk-critical">{{ finding_stats.count_critical }} Critical</strong></template>
+            <template #high v-if="finding_stats.count_high > 0"><strong class="risk-high">{{ finding_stats.count_high }} High</strong></template>
+            <template #medium v-if="finding_stats.count_medium > 0"><strong class="risk-medium">{{ finding_stats.count_medium }} Medium</strong></template>
+            <template #low v-if="finding_stats.count_low > 0"><strong class="risk-low">{{ finding_stats.count_low }} Low</strong></template>
+            <template #info v-if="finding_stats.count_info > 0"><strong class="risk-info">{{ finding_stats.count_info }} Info</strong></template>
+        </comma-and-join>
+        vulnerabilities were identified:
+    </p>
+
+    <table class="findings-summary">
+        <thead>
+            <tr>
+                <th>Finding Severity</th>
+                <th>Number of Findings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-if="finding_stats.count_critical > 0">
+                <td class="risk-bg-critical" align="center">Critical</td>
+                <td align="center">{{ finding_stats.count_critical }}</td>
+            </tr>
+            <tr v-if="finding_stats.count_high > 0">
+                <td class="risk-bg-high" align="center">High</td>
+                <td align="center">{{ finding_stats.count_high }}</td>
+            </tr>
+            <tr v-if="finding_stats.count_medium > 0">
+                <td class="risk-bg-medium" align="center">Medium</td>
+                <td align="center">{{ finding_stats.count_medium }}</td>
+            </tr>
+            <tr v-if="finding_stats.count_low > 0">
+                <td class="risk-bg-low" align="center">Low</td>
+                <td align="center">{{ finding_stats.count_low }}</td>
+            </tr>
+            <tr v-if="finding_stats.count_info > 0">
+                <td class="risk-bg-info" align="center">Informational</td>
+                <td align="center">{{ finding_stats.count_info }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <figure>
+            <chart :width="15" :height="10" :config="{
+                type: 'bar',
+                data: {
+                    labels: ['Critical', 'High', 'Medium', 'Low', 'Info'],
+                    datasets: [{
+                        data: [
+                            finding_stats.count_critical,
+                            finding_stats.count_high,
+                            finding_stats.count_medium,
+                            finding_stats.count_low,
+                            finding_stats.count_info
+                        ],
+                        backgroundColor: [
+                            cssvar('--color-risk-critical'),
+                            cssvar('--color-risk-high'),
+                            cssvar('--color-risk-medium'),
+                            cssvar('--color-risk-low'),
+                            cssvar('--color-risk-info')
+                        ],
+                    }],
+                },
+                options: {
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' }, // Specify the font color for the x-axis ticks
+                            grid: { color: cssvar('--color-secondary') }, // Set the grid color for the x-axis
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0, color: 'white' },
+                            grid: { color: cssvar('--color-secondary') }, // Set the grid color for the y-axis
+                        },
+                    },
+                    plugins: {legend: { display: false }},
+                },
+            }" />
+            <figcaption>Distribution of identified vulnerabilities</figcaption>
+        </figure>
+    </div>
+    <pagebreak />
+</section>
+
+<section>
+    <h2 id="external-penetration-test-findings" class="in-toc numbered">External Penetration Test Findings</h2>
+    <p>
+        Below is a high-level overview of each external finding identified during testing. The following table illustrates the vulnerabilities found by impact and recommended remediations. These findings are covered in depth in the
+        <ref to="findings">Technical Findings Details</ref> section of this report.
+    </p>
+    <table class="findings-list">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Severity</th>
+                <th>Finding Name</th>
+                <th align="center">Recommendation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="finding in findings.filter(finding => finding.findings_type.value === 'external_finding')" :key="finding.id" class="table-row-link">
+                <td align="center" class="nowrap">
+                    EPT-<ref :to="finding.id" class="ref-finding-number" />
+                </td>
+                <td :class="['nowrap', 'risk-bg-' + finding.cvss.level]">
+                    <ref :to="finding.id">{{ finding.cvss.score }} ({{ lodash.capitalize(finding.cvss.level) }})</ref>
+                </td>
+                <td>
+                    <ref :to="finding.id">{{ finding.title }}</ref>
+                </td>
+                <td align="center">
+                    See Page<ref :to="finding.id" class="ref-page" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <pagebreak />
+</section>
+
+<section>
+    <h2 id="internal-penetration-test-findings" class="in-toc numbered">Internal Penetration Test Findings</h2>
+    <p>
+        Below is a high-level overview of each internal finding identified during testing. The following table illustrates the vulnerabilities found by impact and recommended remediations. These findings are covered in depth in the
+        <ref to="findings">Technical Findings Details</ref> section of this report.
+    </p>
+    <table class="findings-list">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Severity</th>
+                <th>Finding Name</th>
+                <th align="center">Recommendation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="finding in findings.filter(finding => finding.findings_type.value === 'internal_finding')" :key="finding.id" class="table-row-link">
+                <td align="center" class="nowrap">
+                    IPT-<ref :to="finding.id" class="ref-finding-number" />
+                </td>
+                <td :class="['nowrap', 'risk-bg-' + finding.cvss.level]">
+                    <ref :to="finding.id">{{ finding.cvss.score }} ({{ lodash.capitalize(finding.cvss.level) }})</ref>
+                </td>
+                <td>
+                    <ref :to="finding.id">{{ finding.title }}</ref>
+                </td>
+                <td align="center">
+                    See Page<ref :to="finding.id" class="ref-page" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <pagebreak />
+</section>
+
+<section class="findings-list">
+    <h1 id="findings" class="in-toc numbered">Technical Findings</h1>
+
+    <div>
+        <h2 id="external-technical-findings" class="in-toc numbered">External Penetration Test Findings</h2>
+    </div>
+
+    <div v-for="finding in findings.filter(finding => finding.findings_type.value === 'external_finding')"> 
+        <h2 :id="finding.id" class="in-toc finding-number" :data-toc-title="`${finding.title} - ${lodash.capitalize(finding.cvss.level)}`">
+            {{ finding.title }} -
+            <span :class="'risk-' + finding.cvss.level">{{ lodash.capitalize(finding.cvss.level) }}</span>
+        </h2>
+        <table class="finding-header">
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">CWE</th>
+                <td>
+                    {{ finding.cwe || '-' }}
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">CVSS 3.1</th>
+                <td>
+                    <span v-if="!finding.cvss.vector || finding.cvss.vector === 'n/a'">N/A</span>
+                    <span v-else>{{ finding.cvss.score}} / {{ finding.cvss.vector }}</span>
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">Description</th>
+                <td>
+                    <markdown :text="finding.summary" />
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">Risk</th>
+                <td>
+                    <markdown :text="finding.risk" />
+                </td>
+            </tr>
+            <tr v-if="finding.affected_components.length > 0">
+                <th :class="'risk-bg-' + finding.cvss.level">Affected Systems</th>
+                <td>
+                    <span v-if="finding.affected_components.length === 0">-</span>
+                    <span v-else-if="finding.affected_components.length === 1">{{ finding.affected_components[0] }}</span>
+                    <ul v-else :class="{'finding-systems': true, 'finding-systems-cols': finding.affected_components.length >= 4}">
+                        <li v-for="c in finding.affected_components">{{ c }}</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">Tools Used</th>
+                <td>
+                    <span v-if="finding.tools.length === 0">-</span>
+                    <span v-else-if="finding.tools.length === 1">{{ finding.tools[0] }}</span>
+                    <ul v-else>
+                        <li v-for="t in finding.tools">{{ t }}</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">Remediation</th>
+                <td>
+                    <markdown :text="finding.recommendation" />
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">References</th>
+                <td>
+                    <span v-if="finding.references.length === 0">-</span>
+                    <span v-else-if="finding.references.length === 1">{{ finding.references[0] }}</span>
+                    <ul v-else>
+                        <li v-for="r in finding.references">{{ r }}</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <div>
+            <h3 id="compromise-walkthrough-details">Detailed Walkthrough</h3>
+            <markdown :text="finding.walkthrough_details" />
+        </div>
+
+        <div>
+            <h3 id="evidence">Evidence</h3>
+            <markdown :text="finding.evidence" />
+        </div>
+        <pagebreak />
+    </div>
+</section>
+
+<section>
+    <div>
+        <h2 id="internal-technical-findings" class="in-toc numbered">Internal Penetration Test Findings</h2>
+    </div>
+
+    <div v-for="finding in findings.filter(finding => finding.findings_type.value === 'internal_finding')" :key="finding.id" class="table-row-link">
+        <h2 :id="finding.id" class="in-toc finding-number" :data-toc-title="`${finding.title} - ${lodash.capitalize(finding.cvss.level)}`">
+            {{ finding.title }} -
+            <span :class="'risk-' + finding.cvss.level">{{ lodash.capitalize(finding.cvss.level) }}</span>
+        </h2>
+        <table class="finding-header">
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">CWE</th>
+                <td>
+                    {{ finding.cwe || '-' }}
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">CVSS 3.1</th>
+                <td>
+                    <span v-if="!finding.cvss.vector || finding.cvss.vector === 'n/a'">N/A</span>
+                    <span v-else>{{ finding.cvss.score}} / {{ finding.cvss.vector }}</span>
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">Description</th>
+                <td>
+                    <markdown :text="finding.summary" />
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">Risk</th>
+                <td>
+                    <markdown :text="finding.risk" />
+                </td>
+            </tr>
+            <tr v-if="finding.affected_components.length > 0">
+                <th :class="'risk-bg-' + finding.cvss.level">Affected Systems</th>
+                <td>
+                    <span v-if="finding.affected_components.length === 0">-</span>
+                    <span v-else-if="finding.affected_components.length === 1">{{ finding.affected_components[0] }}</span>
+                    <ul v-else :class="{'finding-systems': true, 'finding-systems-cols': finding.affected_components.length >= 4}">
+                        <li v-for="c in finding.affected_components">{{ c }}</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">Tools Used</th>
+                <td>
+                    <span v-if="finding.tools.length === 0">-</span>
+                    <span v-else-if="finding.tools.length === 1">{{ finding.tools[0] }}</span>
+                    <ul v-else>
+                        <li v-for="t in finding.tools">{{ t }}</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">Remediation</th>
+                <td>
+                    <markdown :text="finding.recommendation" />
+                </td>
+            </tr>
+            <tr>
+                <th :class="'risk-bg-' + finding.cvss.level">References</th>
+                <td>
+                    <span v-if="finding.references.length === 0">-</span>
+                    <span v-else-if="finding.references.length === 1">{{ finding.references[0] }}</span>
+                    <ul v-else>
+                        <li v-for="r in finding.references">{{ r }}</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <div>
+            <h3 id="compromise-walkthrough-details">Detailed Walkthrough</h3>
+            <markdown :text="finding.walkthrough_details" />
+        </div>
+
+        <div>
+            <h3 id="evidence">Evidence</h3>
+            <markdown :text="finding.evidence" />
+        </div>
+        <pagebreak />
+    </div>
+</section>
+
+<section>
+    <div>
+        <h1 id="appendix" class="in-toc numbered">Additional Scans and Reports</h1>
+        <markdown :text="report.appendix_additional_sections" />
+    </div>
+    <pagebreak />
+</section>
+
+<section>
+    <div class="end-of-report">
+        <h1>Last Page</h1>
+    </div>
+</section>
