@@ -2,7 +2,7 @@
 Welcome to my repository for custom certification reports created with SysReptor.
 
 ## Available Report Templates
-TCM Security - Practical Network Penetration Tester (PNPT):
+**TCM Security - Practical Network Penetration Tester (PNPT)**:
 This template is designed to streamline the reporting process for the TCM Security PNPT certification exam. Say goodbye to clunky Microsoft Office Word and LibreOffice Writer. With this template, you can enhance your efficiency and speed during exam report creation, allowing you to focus on what truly matters.
 
 ## **Usage**
